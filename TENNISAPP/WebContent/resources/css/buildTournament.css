@@ -1,0 +1,80 @@
+
+.w3-ul {
+    list-style-type: none;
+    padding: 0;
+    margin: 0;
+}
+.md-form {
+    position: relative;
+    margin-bottom: 1.5rem;
+}
+.md-form, .modal-dialog.cascading-modal .modal-header .social-buttons {
+    margin-top: 1.5rem;
+}
+.md-form input[type=date], .md-form input[type=datetime-local], .md-form input[type=email], .md-form input[type=number], .md-form input[type=password], .md-form input[type=search-md], .md-form input[type=search], .md-form input[type=tel], .md-form input[type=text], .md-form input[type=time], .md-form input[type=url], .md-form textarea.md-textarea {
+    -webkit-transition: border-color .15s ease-in-out,-webkit-box-shadow .15s ease-in-out;
+    -o-transition: border-color .15s ease-in-out,box-shadow .15s ease-in-out;
+    transition: border-color .15s ease-in-out,box-shadow .15s ease-in-out;
+    transition: border-color .15s ease-in-out,box-shadow .15s ease-in-out,-webkit-box-shadow .15s ease-in-out;
+    outline: 0;
+    -webkit-box-shadow: none;
+    box-shadow: none;
+    border: none;
+    border-bottom: 1px solid #ced4da;
+    -webkit-border-radius: 0;
+    border-radius: 0;
+    -webkit-box-sizing: content-box;
+    box-sizing: content-box;
+    background-color: transparent;
+}
+.md-form .form-control {
+    margin: 0 0 .5rem;
+    -webkit-border-radius: 0;
+    border-radius: 0;
+    padding: .3rem 0 .55rem;
+    background-image: none;
+    background-color: transparent;
+    height: auto;
+}
+.md-form label {
+    position: absolute;
+    top: .65rem;
+    left: 0;
+    -webkit-transition: .2s ease-out;
+    -o-transition: .2s ease-out;
+    transition: .2s ease-out;
+    cursor: text;
+    color: #757575;
+}
+.md-form label, .modal-dialog.cascading-modal .modal-header .social-buttons a {
+    font-size: 1rem;
+}
+.md-form input[type=date]:focus:not([readonly]), .md-form input[type=datetime-local]:focus:not([readonly]), .md-form input[type=email]:focus:not([readonly]), .md-form input[type=number]:focus:not([readonly]), .md-form input[type=password]:focus:not([readonly]), .md-form input[type=search-md]:focus:not([readonly]), .md-form input[type=search]:focus:not([readonly]), .md-form input[type=tel]:focus:not([readonly]), .md-form input[type=text]:focus:not([readonly]), .md-form input[type=time]:focus:not([readonly]), .md-form input[type=url]:focus:not([readonly]), .md-form textarea.md-textarea:focus:not([readonly]) {
+    -webkit-box-shadow: 0 1px 0 0 #4285f4;
+    box-shadow: 0 1px 0 0 #4285f4;
+    border-bottom: 1px solid #4285f4;
+}
+.md-form .form-control:focus {
+    -webkit-box-shadow: none;
+    box-shadow: none;
+    background: 0 0;
+}
+.md-form input[type=date]:focus:not([readonly])+label, .md-form input[type=datetime-local]:focus:not([readonly])+label, .md-form input[type=email]:focus:not([readonly])+label, .md-form input[type=number]:focus:not([readonly])+label, .md-form input[type=password]:focus:not([readonly])+label, .md-form input[type=search-md]:focus:not([readonly])+label, .md-form input[type=search]:focus:not([readonly])+label, .md-form input[type=tel]:focus:not([readonly])+label, .md-form input[type=text]:focus:not([readonly])+label, .md-form input[type=time]:focus:not([readonly])+label, .md-form input[type=url]:focus:not([readonly])+label, .md-form textarea.md-textarea:focus:not([readonly])+label {
+    color: #4285f4;
+}
+.md-form input[type=date]+label:after, .md-form input[type=datetime-local]+label:after, .md-form input[type=email]+label:after, .md-form input[type=number]+label:after, .md-form input[type=password]+label:after, .md-form input[type=search-md]+label:after, .md-form input[type=search]+label:after, .md-form input[type=tel]+label:after, .md-form input[type=text]+label:after, .md-form input[type=time]+label:after, .md-form input[type=url]+label:after, .md-form textarea.md-textarea+label:after {
+    content: "";
+    position: absolute;
+    top: 65px;
+    display: block;
+    opacity: 0;
+    -webkit-transition: .2s opacity ease-out,.2s color ease-out;
+    -o-transition: .2s opacity ease-out,.2s color ease-out;
+    transition: .2s opacity ease-out,.2s color ease-out;
+}
+.md-form label.active {
+    font-size: .8rem;
+    -webkit-transform: translateY(-140%);
+    -ms-transform: translateY(-140%);
+    transform: translateY(-140%);
+}
