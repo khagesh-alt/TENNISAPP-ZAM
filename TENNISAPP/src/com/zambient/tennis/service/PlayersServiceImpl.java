@@ -71,5 +71,11 @@ public class PlayersServiceImpl implements PlayersService{
 		// TODO Auto-generated method stub
 		return playersDao.getAllRankCategories();
 	}
+
+	@Override
+	public int addSecondPlayer(PlayersBean playersBean) {
+		// TODO Auto-generated method stub
+		return playersDao.addSecondPlayer(playersBean);
+	}
 	
 }

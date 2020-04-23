@@ -263,5 +263,11 @@ public class TournamentServiceImpl implements TournamentService{
 		return tournamentDao.isPlayerListPublish(tournamentId, categoryId);
 	}
 
+	@Override
+	public boolean getPlayerPublishMethod(int tournamentId, int categoryId) {
+		// TODO Auto-generated method stub
+		return tournamentDao.getPlayerPublishMethod(tournamentId, categoryId);
+	}
+
 
 }

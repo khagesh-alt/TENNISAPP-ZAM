@@ -135,6 +135,7 @@ public class PlayersController {
 				 userSession.setPassword(playerBean.getPassword());
 				 userSession.setPhone(playerBean.getPhone());
 				 userSession.setLoginType(0);
+				 userSession.setGender(playerBean.getGender());
 				 log.info("Session"+userSession.getName());
 				 return new RedirectView("playerhome");
 				 //return "redirect:/upcomingtournament";
@@ -171,6 +172,7 @@ public class PlayersController {
 				userSession.setPassword(playerBean.getPassword());
 				userSession.setPhone(playerBean.getPhone());
 				userSession.setLoginType(0);
+				userSession.setGender(playerBean.getGender());
 				log.info("Session" + userSession.getName());
 				result = "Success";
 			} else {
@@ -411,6 +413,28 @@ public class PlayersController {
 			return new RedirectView("playerhome");
 
 	}
+	/**
+	 * This method is used to register Second player by First player
+	 * */
+	@RequestMapping(value = "playerView/addSecondPlayer", method = RequestMethod.POST,produces = MediaType.APPLICATION_JSON_VALUE)
+	 public int  addSecondPlayer(@RequestBody PlayersBean playersBean, HttpServletRequest request, HttpServletResponse response){
+		log.info("PlayersController :: addPlayer POST method"+playersBean);
+		response.setContentType("application/json");
+		response.setHeader("Access-Control-Allow-Origin","*");
+		response.setHeader("value", "valid");
+		playersBean.setGender((long)userSession.getGender());
+		int result =0;
+		if(playersBean.getItaId() !=null && playersBean.getItaRank() == null)
+			return 0;
+		if(playersBean.getItaId() ==null && playersBean.getItaRank() != null)
+			return 0;
+		
+		if(playersBean.getAddress() != "" && playersBean.getDateOfBirth() != "" && playersBean.getEmail() != "" && playersBean.getName() != "" && playersBean.getPhone() != ""){
+			 result = playersService.addSecondPlayer(playersBean);
+		}else
+			result = 0;
+		 return result;
+	 }
 }
 
 

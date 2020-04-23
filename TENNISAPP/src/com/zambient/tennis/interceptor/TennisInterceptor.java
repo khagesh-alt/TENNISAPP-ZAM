@@ -40,7 +40,7 @@ public class TennisInterceptor implements HandlerInterceptor{
 			return true;
 		}
 		else{
-			 if(uri.startsWith("/TENNISAPP/upcomingtournament") || uri.startsWith("/TENNISAPP/getUpcommingTournament") || uri.startsWith("/TENNISAPP/playerhome") || uri.startsWith("/TENNISAPP/showTournament") || uri.startsWith("/TENNISAPP/view_list")
+			 if(uri.startsWith("/TENNISAPP/upcomingtournament") || uri.startsWith("/TENNISAPP/getUpcommingTournament") || uri.startsWith("/TENNISAPP/playerhome") || uri.startsWith("/TENNISAPP/showTournament") || uri.startsWith("/TENNISAPP/view_list") || uri.startsWith("/TENNISAPP/playerView/addSecondPlayer")
 					 || uri.startsWith("/TENNISAPP/playerView") || uri.startsWith("/TENNISAPP/adminlogout") || uri.startsWith("/TENNISAPP/view_academy_list") 
 					 || uri.startsWith("/TENNISAPP/playerlogout") || uri.startsWith("/TENNISAPP/registerPlayerForTournamentCategory") || uri.startsWith("/TENNISAPP/redirectToShowTournament")){
 				 System.out.println("Players:::::::");

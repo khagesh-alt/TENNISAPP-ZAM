@@ -205,7 +205,7 @@ $scope.getRagisteredPlayers = function(){
 	method : "GET",
 	url : scheduleUrl
   }).then(function mySuccess(response) {
-	 console.log(JSON.stringify(response.data));
+	// console.log(JSON.stringify(response.data));
 	$scope.playerListForAcategory = response.data;
   }, function myError(response) {
   });
@@ -234,7 +234,19 @@ $scope.viewPlayersTournament = function(tournamentId,categoryId,tournamentFee,pl
 	$scope.showFeature(2);
 	$scope.finalobj =[]; // schedule
 	$scope.avgTime = 0;
+	$scope.getPlayerPublishOrNot(tournamentId,categoryId);
 }  
+$scope.getPlayerPublishOrNot = function(tournamentId,categoryId){
+	var existingPlayerUrl = url+"playerView/getPlayersPublishMethod?tournamentId="+tournamentId+"&categoryId="+categoryId;
+	$http({
+		method : "GET",
+		url : existingPlayerUrl
+	  }).then(function mySuccess(response) {
+		  $scope.playerPublish = JSON.parse(response.data);
+	  }, function myError(response) {
+		//alert(response);
+	  });
+}
 $scope.validateChangePassword = function () {	
 	var oldpwd = $scope.oldPassword;
 	var newpwd = $scope.newPassword;

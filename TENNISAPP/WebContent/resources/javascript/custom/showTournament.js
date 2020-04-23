@@ -203,7 +203,13 @@ $scope.isPlayerListPublish = function(tournamentId,categoryId){
 	      window.saveAs(blob, $scope.titleName+'.png');
 	    });
 	}
-	
+	$( "#dateOfBirth" ).datepicker({
+		  dateFormat : 'yy-mm-dd',
+	     changeMonth: true,
+	     changeYear: true,
+	     yearRange: '-100y:c+nn',
+	     maxDate: '-1d'
+	   });
 	$scope.registerPlayerForTournament = function(tournamentId,categoryId,tournamentFee,matchType,player,gender,age){
 		$scope.tournamentIdForReg = tournamentId;
 		$scope.categoryIdForReg = categoryId;
@@ -218,17 +224,22 @@ $scope.isPlayerListPublish = function(tournamentId,categoryId){
 		}
 		else{
 			if(player < 0){
-			var tournamentUrl = url+"playerView/getPlayerList?tournamentId="+tournamentId+"&categoryId="+categoryId;
-			$http({
-				method : "GET",
-				url : tournamentUrl
-			  }).then(function mySuccess(response) {
-				  $scope.otherPlayers = response.data;
-			  }, function myError(response) {
-				//alert(response);
-			  });
-			$("#modalContactForm").modal("show");
-			//$scope.tournamentTabs = false;
+				if(matchType == 1)
+			      $("#modalContactForm").modal("show");
+				else{
+					var tournamentUrl = url+"playerView/getPlayerList?tournamentId="+tournamentId+"&categoryId="+categoryId;
+					$http({
+						method : "GET",
+						url : tournamentUrl
+					  }).then(function mySuccess(response) {
+						  $scope.otherPlayers = response.data;
+					  }, function myError(response) {
+						//alert(response);
+					  });
+					$scope.getRankCategories();
+					 $("#modalDoublesRegForm").modal("show");
+				}
+				 
 		  }else{
 			  $scope.messageWithinfo("You've already resistered...");
 		  }
@@ -237,6 +248,17 @@ $scope.isPlayerListPublish = function(tournamentId,categoryId){
 			$scope.messageWithinfo("Sorry registration closed for this tournament...");
 		}
 	}
+	$scope.getRankCategories = function(){
+		var rankListUrl = url+"playerView/getAllRankCategories";
+		$http({
+			method : "GET",
+			url : rankListUrl
+		  }).then(function mySuccess(response) {
+			  $scope.rankList = response.data;
+			  $scope.rankItem = $scope.rankList[0];
+		  }, function myError(response) {
+		  });
+		}
 	
 	$scope.registerPlayerForTournamentCategory = function(){
 		var formData = new FormData();
@@ -247,8 +269,8 @@ $scope.isPlayerListPublish = function(tournamentId,categoryId){
 		formData.append('playerIdForReg', $("#playerIdForReg").val());
 		formData.append('tournamentIdForReg',$("#tournamentIdForReg").val());
 		formData.append('categoryIdForReg', $("#categoryIdForReg").val());
-		formData.append('matchTypeReg', $("#matchTypeReg").val());
-		formData.append('secondPlayer',$( "#secondPlayer option:selected" ).val());
+		formData.append('matchTypeReg', 1);
+		formData.append('secondPlayer',-1);
 		
 		var paymentUrl = url+"registerPlayerForTournamentCategoryFromJs";
 		$.ajax({
@@ -261,6 +283,140 @@ $scope.isPlayerListPublish = function(tournamentId,categoryId){
 	        	$scope.afterLoginTournament();
 	         if(data == "Payment Received Successfully"){
 	        	 $("#modalContactForm").modal("hide");
+	        	 $scope.messageWithSucces(data);
+	         }else{
+	        	 $scope.messageWithError(data);
+	         }
+	        }
+	    });
+		
+	}
+	
+	//Player Registration
+	$scope.validatePlayerRegistration = function () {
+	    var name =  $scope.name; 
+		var phone =  parseInt($scope.phone); 
+		var email =  $scope.email; 
+		var address =  $scope.address; 
+		var dateOfBirth =  $("#dateOfBirth").val();
+		var rankid = $scope.rankItem.rankId;
+		var itaRank = parseInt($("#itaRank").val()); 
+		var itaId = parseInt($("#itaId").val()); 
+		//var gender = $("input[name='gender']:checked").val();
+		if(name.trim() == ""){
+			$scope.registerPlyrValidate = "Name should not be empty...";
+			return false;
+		}
+		if(phone == ""){
+			$scope.registerPlyrValidate = "Phone should not be empty...";
+			return false;
+		}
+		if((phone.toString()).length < 9){
+			$scope.registerPlyrValidate = "Enter Valid Phone Number...";
+			return false;
+		}
+		if(email.trim() == ""){
+			$scope.registerPlyrValidate = "Email should not be empty...";
+			return false;
+		}
+		if(address.trim() == ""){
+			$scope.registerPlyrValidate = "Address should not be empty...";
+			return false;
+		}
+		if(dateOfBirth == ""){
+			$scope.registerPlyrValidate = "Date of birth should not be empty...";
+			return false;
+		}
+		if(rankid == undefined || isNaN(rankid) || rankid == ""){
+			$scope.registerPlyrValidate = "Please select ranking from list...";
+			return false;
+		}
+		if(((itaRank == "" || isNaN(itaRank)) || (itaId == "" || isNaN(itaId))) && rankid !=1){
+			$scope.registerPlyrValidate = "Id & Rank should not be empty..";
+			return false;
+		}
+		if((itaRank == "" || isNaN(itaRank)) && (itaId == "" || isNaN(itaId)) && rankid ==1){
+			itaRank = 11111111;
+			itaId = 11111111;
+		}
+		
+			var input = {
+			"name": name,
+			"dateOfBirth":dateOfBirth,
+			"address":address,
+			"lavel":"high",
+			"phone":phone,
+			"email":email,
+			"itaId":itaId,
+			"itaRank":itaRank,
+			//"gender":parseInt(gender),
+			"points":5,
+			"rank":rankid
+			 }
+			$scope.addSecondPlayerRegistration(input);
+	  }
+	// Player registration
+	$scope.addSecondPlayerRegistration = function (input) {
+		var addPlayerUrl = url+"playerView/addSecondPlayer";
+		$.ajax({
+			 async:false,
+		      type: "POST",
+		      contentType : 'application/json; charset=utf-8',
+		      url:addPlayerUrl,
+		      data: JSON.stringify(input), 
+	           success: function(data){
+	        	   if(data > 0){
+	        		   $scope.secondPlayer = data;
+	        		   $("#modalDoublesRegForm").modal("hide");
+	   				   $("#modalSecondPayment").modal("show");
+	        	   }
+	        	   else if(data == -1)
+	        		   $scope.registerPlyrValidate = "Player already registered";
+	        	   else
+	        		   $scope.registerPlyrValidate = "Something went wrong";
+	        		   
+	        }
+	    });
+		
+/*		var addPlayerUrl = url+"playerView/addSecondPlayer", data = JSON.stringify(input),config='application/json; charset=utf-8';
+
+		$http.post(addPlayerUrl, data, config).then(function (response) {
+			$scope.secondPlayer = response.data;
+			$("#modalDoublesRegForm").modal("hide");
+			$("#modalSecondPayment").modal("show");
+		}, function (response) {
+			$("#modalDoublesRegForm").modal("hide");
+		});*/
+	}
+	
+	$scope.selectSecondPlayer = function () {
+		$scope.secondPlayer = $( "#secondPlayer option:selected" ).val();
+		$("#modalDoublesRegForm").modal("hide");
+		$("#modalSecondPayment").modal("show");
+	}
+	$scope.registerDoublesPlayerForTournamentCategory = function(){
+		var formData = new FormData();
+		formData.append('cardHolderName', $scope.cardSecondHolderName);
+		formData.append('cardNumber', $scope.cardSecondNumber);
+		formData.append('cardType', $scope.cardSecondType);
+		formData.append('amount', $("#Secondamount").val());
+		formData.append('playerIdForReg', $("#SecondplayerIdForReg").val());
+		formData.append('tournamentIdForReg',$("#SecondtournamentIdForReg").val());
+		formData.append('categoryIdForReg', $("#SecondcategoryIdForReg").val());
+		formData.append('matchTypeReg', 2);
+		formData.append('secondPlayer',$scope.secondPlayer);
+		
+		var paymentUrl = url+"registerPlayerForTournamentCategoryFromJs";
+		$.ajax({
+	        url: paymentUrl,
+	        data: formData,
+	        contentType: false,
+	        processData: false,
+	        type: 'POST',
+	        success: function(data){
+	        	$scope.afterLoginTournament();
+	         if(data == "Payment Received Successfully"){
+	        	 $("#modalSecondPayment").modal("hide");
 	        	 $scope.messageWithSucces(data);
 	         }else{
 	        	 $scope.messageWithError(data);

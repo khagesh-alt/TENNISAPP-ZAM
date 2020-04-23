@@ -19,6 +19,9 @@ public class UserSession implements Serializable {
 	private Integer loginType;
 	private String mailId;
 	private Integer organiserId;
+	private Integer gender;
+	
+	
 	public Integer getPlayerId() {
 		return playerId;
 	}
@@ -66,6 +69,12 @@ public class UserSession implements Serializable {
 	}
 	public void setOrganiserId(Integer organiserId) {
 		this.organiserId = organiserId;
+	}
+	public Integer getGender() {
+		return gender;
+	}
+	public void setGender(Integer gender) {
+		this.gender = gender;
 	}
 
 }

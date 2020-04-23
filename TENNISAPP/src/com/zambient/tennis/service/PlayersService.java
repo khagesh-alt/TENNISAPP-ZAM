@@ -20,5 +20,6 @@ public interface PlayersService {
 	public boolean isMobileExist(String mobile);
 	public Map<String, Object[]> downloadPlayersListWithDetails();
 	public List<RankCategoryBean> getAllRankCategories();
+	public int addSecondPlayer(PlayersBean playersBean);
 
 }

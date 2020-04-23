@@ -2607,4 +2607,16 @@ public class TournamentDaoImpl implements TournamentDao{
 		}
 		return bean;
 	}
+	@Override
+	public boolean getPlayerPublishMethod(int tournamentId, int categoryId) {
+		boolean result;
+		try{
+		String QUERY = "SELECT CASE WHEN c.`isPlayerListActive`= 1 THEN 'true' ELSE 'false' END AS actbol FROM `tournament_category` c WHERE c.tournament_id=? AND c.category_id=?";
+		result =  jdbcTemplate.queryForObject(QUERY, new Object[]{tournamentId, categoryId},Boolean.class);
+		}catch(Exception e){
+			e.printStackTrace();
+			return false;
+		}
+		return result;
+	}
 }

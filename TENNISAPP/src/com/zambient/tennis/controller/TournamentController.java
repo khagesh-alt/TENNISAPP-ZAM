@@ -576,4 +576,12 @@ System.out.println("Result:: "+result);
 			return null;
 			
 		}
+		@RequestMapping(value = "playerView/getPlayersPublishMethod", method = RequestMethod.GET)
+		public @ResponseBody boolean getPlayersPublishMethod(HttpServletRequest request, HttpServletResponse response, @RequestParam("tournamentId") int tournamentId,  @RequestParam("categoryId") int categoryId) {
+			log.info("getPlayersPublishMethod GET ");
+			response.setContentType("application/json");
+			response.setHeader("Access-Control-Allow-Origin","*");
+			response.setHeader("value", "valid");
+			 return tournamentService.getPlayerPublishMethod(tournamentId, categoryId);
+		}
 }

@@ -200,6 +200,9 @@ font-size: 11px;
 color: #0ebb5a;
 font-size: 11px;
 }
+.ui-datepicker select.ui-datepicker-month, .ui-datepicker select.ui-datepicker-year {
+    float: left;
+}
   </style>
 </head>
 
@@ -557,25 +560,15 @@ font-size: 11px;
       </div>
       
       <div class="modal-body mx-3">
-      <%-- <form action="./registerPlayerForTournamentCategory" method="post" name="registerPlayerTournament" ngNativeValidate> --%>
       <form ng-submit="registerPlayerForTournamentCategory()" method="post" name="registerPlayerTournament" ngNativeValidate>
-	      <div ng-if="matchTypeReg == 2" class="md-form mb-5">
-		         <select id="secondPlayer" name="secondPlayer" ng-model="secondPlayer" class="form-control" required="required">
-				  <option value="">Select Other Player*</option>
-				  <option ng-repeat="x in otherPlayers | filter:{ player_id: '!${sessionScope['scopedTarget.userSession'].playerId}'}" value="{{x.player_id}}">{{x.player_name}}</option>
-				</select>
-				<span style="color:Red;font-size: .8em;" ng-show="registerPlayerTournament.secondPlayer.$error.required">Other player is required!</span>
-	        </div>
         <div class="centredisplay">
         <label >Card Holder Name*</label>
           <input type="text" id="cardHolderName" ng-model="cardHolderName" name="cardHolderName" class="form-control validate" required="required">
-         <!--  <span style="color:Red;font-size: .8em;" ng-show="registerPlayerTournament.cardHolderName.$error.required">Card Holder Name is required!</span> -->
        </div>
       
         <div class="centredisplay">
         <label >Card Number*</label>
           <input type="text" id="cardNumber" ng-model="cardNumber" name="cardNumber" class="form-control validate" required="required">
-         <!--  <span style="color:Red;font-size: .8em;" ng-show="registerPlayerTournament.cardNumber.$error.required">Card number is required!</span> -->
        </div>
       
         <div class="centredisplay">
@@ -588,7 +581,6 @@ font-size: 11px;
 			  <option value="RuPay">RuPay</option>
 			  <option value="Maestro">Maestro</option>
 			</select>
-			<!-- <span style="color:Red;font-size: .8em;" ng-show="registerPlayerTournament.cardType.$error.required">Card type is required!</span> -->
         </div>
 
         <div class="centredisplay">
@@ -695,7 +687,178 @@ font-size: 11px;
 </div>
 </div>
 <!-- Profile -->
-     
+
+
+ <!--  View Schedule Close -->	
+<div class="modal fade" id="modalDoublesRegForm" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header text-center" style="background: #00c851!important;color: #fff;">
+        <h6 class="modal-title w-100 font-weight-bold">Second Player</h6>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close" style="color: #fff;">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      
+      <div class="modal-body mx-3" style="font-size: 12px;">
+      <div class="col-sm-12" style="text-align: center;margin-bottom: 20px;">
+		      <div class="custom-control custom-radio custom-control-inline">
+			  <input type="radio" class="custom-control-input" value="existingCourt" ng-model="place" name="place" id="defaultInline1">
+			  <label class="custom-control-label" for="defaultInline1">Existing Player</label>
+			 </div>
+			 <div class="custom-control custom-radio custom-control-inline">
+			  <input type="radio" class="custom-control-input" value="newCourt" ng-model="place" name="place" id="defaultInline2" checked>
+			  <label class="custom-control-label" for="defaultInline2">New Player</label>
+			</div>
+	    </div>
+	    <div ng-show="place === 'existingCourt'" style="text-align: center;width: 100%;">
+	       <form ng-submit="selectSecondPlayer()" method="post" name="registerPlayerTournament" ngNativeValidate>
+	         <div class="md-form mb-5">
+		         <select id="secondPlayer" name="secondPlayer" ng-model="secondPlayer" class="form-control" required="required">
+				  <option value="">Select Other Player*</option>
+				  <option ng-repeat="x in otherPlayers | filter:{ player_id: '!${sessionScope['scopedTarget.userSession'].playerId}'}" value="{{x.player_id}}">{{x.player_name}}</option>
+				</select>
+				<span style="color:Red;font-size: .8em;" ng-show="registerPlayerTournament.secondPlayer.$error.required">Other player is required!</span>
+	        </div>
+	        <button type="submit" class="btn btn-unique" style="background: #00c851!important;color: #fff;">Next</button>
+	        </form>
+	    </div>
+	     <div ng-show="place === 'newCourt'">
+	     <form ng-submit="validatePlayerRegistration()" method="post" name="registerPlayerTournament" ngNativeValidate>
+	       <div class="row">
+	         <div class="col-sm-12"> 
+	        <label for="name">Name*</label>
+			<input type="text" id="name" class="form-control" ng-model="name" name="name" maxlength="20" required="required" autocomplete="off" ng-click="registerPlyrValidate = null">
+	       </div>
+	     </div>
+	        <div class="row">
+			    <div class="col-sm-6"> 
+			        <label for="phone">Phone*</label>
+			        <input type="text" id="phone" ng-model="phone" name="phone" class="form-control" ng-pattern="/^[0-9]{10}$/" maxlength="10" required="required" ng-click="registerPlyrValidate = null" autocomplete="off">
+				    <span style="color:Red;font-size: 1em;" ng-show="registerByPlayer.phone.$error.number">Not valid number!</span>
+				    <span style="color:Red;font-size: 1em;" ng-show="registerByPlayer.phone.$dirty&&registerByPlayer.phone.$error.pattern">Only Numbers Allowed, should 10 digits!</span>
+			    </div>
+			    <div class="col-sm-6"> 
+			    <label for="email">Email*</label>
+			    <input type="email" id="email" ng-model="email" name="email" class="form-control" maxlength="45" required="required" ng-click="registerPlyrValidate = null" autocomplete="off">
+	            <span style="color:Red;font-size: 1em;" ng-show="registerByPlayer.email.$dirty&&registerByPlayer.email.$error.email">Not valid email!</span>
+			    </div>
+			</div>
+				<div class="row">
+				    <div class="col-sm-6"> 
+				    <label for="address">Address*</label>
+					<textarea type="text" id="address" ng-model="address" name="address" class="md-textarea form-control" rows="1" maxlength="150" required="required" ng-click="registerPlyrValidate = null" autocomplete="off"></textarea>
+					</div>
+					<div class="col-sm-6"> 
+					<label for="dateOfBirth">Date of Birth*</label>
+					<input type="text" id="dateOfBirth" ng-model="dateOfBirth" class="form-control" required="required" ng-click="registerPlyrValidate = null" autocomplete="off">
+					</div>
+			   </div>
+			   <div class="row">
+				    <div class="col-sm-12"> 
+				    <label for="address">Select Ranking*</label>
+				    <select ng-model="rankItem" ng-options="rankdata.rankName for rankdata in rankList" class="form-control" name="rankItem" id="rankid" style="border-radius: 0px;background: transparent;border: 1px solid #ccc;" autocomplete="off">
+		            </select>
+					</div>
+			   </div>
+			    <div class="" ng-if="rankItem.rankId != 1">
+			      <div class="row">
+					  <div class="col-sm-6"> 
+					      <label for="itaId">Id</label>
+					      <input type="text" id="itaId" ng-model="itaId" class="form-control" pattern="\d*" maxlength="10" autocomplete="off">
+					  </div>
+				      <div class="col-sm-6"> 
+				          <label for="itaRank">Rank</label>
+					      <input type="text" id="itaRank" ng-model="itaRank" class="form-control" pattern="\d*" maxlength="10" autocomplete="off">
+					  </div>
+			       </div>
+			     </div><br>
+			     <!-- <div class="row">
+					  <div class="col-sm-6"> 
+					  <div class="custom-control custom-radio">
+					  <input type="radio" class="custom-control-input" id="male" value="0" name="gender" checked>
+					  <label class="custom-control-label" for="male">Male</label>
+				       </div>
+					  </div>
+					  <div class="col-sm-6"> 
+					  <div class="custom-control custom-radio">
+					  <input type="radio" class="custom-control-input" id="female" value="1" name="gender">
+					  <label class="custom-control-label" for="female">Female</label>
+					  </div>
+					  </div>
+					  </div><br> -->
+					   <p style="margin: 0px;color: red;font-size: 12px;">{{registerPlyrValidate}}</p>
+			         <div class="row"> 
+			     </div>
+			     <div class="modal-footer d-flex justify-content-center">
+			        <button type="submit" class="btn btn-unique" style="background: #00c851!important;color: #fff;">Next</button>
+			      </div>
+			     </form>
+		     <br>
+	     </div>
+	      <%--  --%>
+      <!-- <div class="modal-footer d-flex justify-content-center">
+        <button type="submit" class="btn btn-unique" style="background: #00c851!important;color: #fff;">Next</button>
+      </div> -->
+      </form>
+    </div>
+  </div>
+</div>
+</div>
+<!--  View Schedule Close -->	
+<div class="modal fade" id="modalSecondPayment" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header text-center" style="background: #00c851!important;color: #fff;">
+        <h6 class="modal-title w-100 font-weight-bold">Payment</h6>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close" style="color: #fff;">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      
+      <div class="modal-body mx-3">
+      <form ng-submit="registerDoublesPlayerForTournamentCategory()" method="post" name="registerDoublesPlayerTournament" ngNativeValidate>
+        <div class="centredisplay">
+        <label >Card Holder Name*</label>
+          <input type="text" id="cardSecondHolderName" ng-model="cardSecondHolderName" name="cardSecondHolderName" class="form-control validate" required="required">
+       </div>
+      
+        <div class="centredisplay">
+        <label >Card Number*</label>
+          <input type="text" id="cardSecondNumber" ng-model="cardSecondNumber" name="cardSecondNumber" class="form-control validate" required="required">
+       </div>
+      
+        <div class="centredisplay">
+        <label></label>
+	         <select id="cardSecondType" ng-model="cardSecondType" name="cardSecondType" class="form-control" required="required">
+			  <option value="">Select Card Type*</option>
+			  <option value="Visa">Visa</option>
+			  <option value="MasterCard">MasterCard</option>
+			  <option value="Contactless">Contactless</option>
+			  <option value="RuPay">RuPay</option>
+			  <option value="Maestro">Maestro</option>
+			</select>
+        </div>
+
+        <div class="centredisplay">
+        <label></label>
+          <input type="number" id="Secondamount" name="Secondamount" ng-value="tournamentFeeForReg" class="form-control validate" readonly="readonly">
+        </div>
+         <input type="hidden" id="SecondplayerIdForReg" name="SecondplayerIdForReg" value="${sessionScope['scopedTarget.userSession'].playerId}"  required="required">
+         
+         <input type="hidden" id="SecondtournamentIdForReg" name="SecondtournamentIdForReg" ng-value="tournamentIdForReg" required="required">
+         
+         <input type="hidden" id="SecondcategoryIdForReg" name="SecondcategoryIdForReg" ng-value="categoryIdForReg" required="required">
+         <input type="hidden" id="SecondmatchTypeReg" name="SecondmatchTypeReg" ng-value="matchTypeReg" required="required">
+         
+      <div class="modal-footer d-flex justify-content-center">
+        <button type="submit" class="btn btn-unique" style="background: #00c851!important;color: #fff;">Submit</button>
+      </div>
+      </form>
+    </div>
+  </div>
+</div>
+</div>		    
   </section>
 </main>
     <a href="#" class="back-to-top"><i class="fa fa-chevron-up"></i></a>

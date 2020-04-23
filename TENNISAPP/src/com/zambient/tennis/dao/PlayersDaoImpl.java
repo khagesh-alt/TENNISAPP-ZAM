@@ -125,7 +125,7 @@ public class PlayersDaoImpl implements PlayersDao{
 	public PlayerUserBO playerLogin(LoginBean loginBean) {
 		PlayerUserBO player = null;
 		try{
-			List<Map<String, Object>> rows = jdbcTemplate.queryForList("SELECT `player_id`,`player_name`,`player_phone`,TIMESTAMPDIFF(YEAR,player_dob, NOW()) AS player_age,`player_pwd` FROM `players` WHERE player_phone=? AND player_pwd=?", new Object[]{loginBean.getUserId(),loginBean.getPassword()});
+			List<Map<String, Object>> rows = jdbcTemplate.queryForList("SELECT `player_id`,`player_name`,`player_phone`,TIMESTAMPDIFF(YEAR,player_dob, NOW()) AS player_age,`player_pwd`,gender FROM `players` WHERE player_phone=? AND player_pwd=?", new Object[]{loginBean.getUserId(),loginBean.getPassword()});
 			if(rows != null && rows.size()>0) {
 				for (Map row : rows) {
 					player = new PlayerUserBO();
@@ -134,6 +134,7 @@ public class PlayersDaoImpl implements PlayersDao{
 					player.setPhone(row.get("player_phone")!=null?row.get("player_phone").toString():"");
 					player.setAge(row.get("player_age")!=null?Integer.parseInt(row.get("player_age").toString()):-1);
 					player.setPassword(row.get("player_pwd")!=null?row.get("player_pwd").toString():"");
+					player.setGender(row.get("gender")!=null?Integer.parseInt(row.get("gender").toString()):-1);
 					return player;
 				}
 			}else return null;
@@ -316,5 +317,37 @@ public class PlayersDaoImpl implements PlayersDao{
 		}
 		return rankList;
 	}
+
+@Override
+public int addSecondPlayer(PlayersBean playersBean) {
+	log.info("PlayersDaoImpl :: addPlayer method");
+	log.info("playersBean ::"+playersBean);
+	String QUERY="INSERT INTO `players` (player_name,player_add,player_lavel,"
+			+ "player_phone,player_email,player_itaid,player_itarank,player_pwd,player_repwd,gender,player_dob) VALUES(?,?,?,?,?,?,?,?,?,?,?)";
+	
+	String QUERY2 = "INSERT INTO `playerranks` (player_id,player_points,player_ranks) VALUES(LAST_INSERT_ID(),?,?)";
+	int result=0;
+	try{
+		int size = jdbcTemplate.queryForObject("SELECT COUNT(player_phone) FROM players WHERE `player_phone`='"+playersBean.getPhone()+"'",Integer.class);
+		if(size <= 0){
+		int val = jdbcTemplate.update(QUERY, new Object[]{playersBean.getName(),playersBean.getAddress(),playersBean.getLavel()
+				,playersBean.getPhone(),playersBean.getEmail(),playersBean.getItaId(),playersBean.getItaRank(),"tennis","tennis",playersBean.getGender(),
+				playersBean.getDateOfBirth()});
+		jdbcTemplate.update(QUERY2, new Object[]{playersBean.getPoints(),playersBean.getRank()});
+		if(val >0)
+			result=jdbcTemplate.queryForObject("SELECT player_id FROM players WHERE player_phone ="+playersBean.getPhone(), Integer.class);
+		else
+			result = 0;
+		}else{
+			result = -1;
+		}
+			
+	}catch(Exception e){
+		result = 0;
+		e.printStackTrace();
+		log.error("Exception In PlayersDaoImpl addPlayer() :: "+e);
+	}
+	return result;
+}
 
 }
