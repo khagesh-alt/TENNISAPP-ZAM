@@ -61,7 +61,6 @@ xmlns:task="http://www.springframework.org/schema/task"
 				 <mvc:exclude-mapping path="/playerforgotPassword"/>
 				 <mvc:exclude-mapping path="/showPlayerResetPassword"/>
 				 <mvc:exclude-mapping path="/playerResetPassword"/>
-				 <mvc:exclude-mapping path="/sendMessage"/>
 				 <mvc:exclude-mapping path="/resources/**"/> 
 				 <mvc:exclude-mapping path="/index"/>
 			<bean class="com.zambient.tennis.interceptor.TennisInterceptor" />

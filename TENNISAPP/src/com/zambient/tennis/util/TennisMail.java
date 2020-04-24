@@ -7,9 +7,7 @@ import javax.mail.internet.MimeMessage;
 import org.apache.log4j.Logger;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.MimeMessageHelper;
-import org.springframework.stereotype.Component;
 
-@Component
 public class TennisMail {
 	final static Logger log = Logger.getLogger(TennisMail.class);
 	private JavaMailSender mailSender;

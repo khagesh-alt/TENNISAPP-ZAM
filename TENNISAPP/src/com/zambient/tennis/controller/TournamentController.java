@@ -584,4 +584,21 @@ System.out.println("Result:: "+result);
 			response.setHeader("value", "valid");
 			 return tournamentService.getPlayerPublishMethod(tournamentId, categoryId);
 		}
+		
+		@RequestMapping(value = "playerView/checkMailStatus", method = RequestMethod.GET)
+		public void checkMailStatus(HttpServletRequest request, HttpServletResponse response){
+			System.out.println("checkMailStatus::::");
+			 new SendEmail("tennisappzambient@gmail.com", "khageshics@gmail.com", "khagesh.patel1991@gmail.com", "Testing", "Hello Shiva....", tennisMail).start();
+			
+			
+		}
+		
+		
+		
+		
+		
+		
+		
+		
+		
 }

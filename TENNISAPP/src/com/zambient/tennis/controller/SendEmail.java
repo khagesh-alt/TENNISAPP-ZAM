@@ -23,7 +23,7 @@ public class SendEmail extends Thread {
 	       this.message=msg;
 	       this.tennisMail=tennisMail;
 	       log.info("Creating thread " +  subject );
-	       log.info("mailFromUsername> "+mailFromUsername+" bccEmail> "+bccEmail+" toEmail> "+toEmail+" msg> "+msg+" tennisMail> "+tennisMail);
+	       //log.info("mailFromUsername> "+mailFromUsername+" bccEmail> "+bccEmail+" toEmail> "+toEmail+" msg> "+msg+" tennisMail> "+tennisMail);
 	   }
 	   public void run() {
 		   log.info("Running " +  subject );
