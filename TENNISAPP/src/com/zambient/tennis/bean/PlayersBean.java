@@ -27,6 +27,11 @@ public class PlayersBean implements Serializable{
 	private Long registeredBy;
 	private Long paymentId;
 	private Long playerId2;
+	private String playerRegBy;
+	private boolean selected;
+	private Integer tournamentId;
+	private Integer categoryId;
+	
 	public String getName() {
 		return name;
 	}
@@ -141,14 +146,41 @@ public class PlayersBean implements Serializable{
 	public void setPaymentId(Long paymentId) {
 		this.paymentId = paymentId;
 	}
+	public String getPlayerRegBy() {
+		return playerRegBy;
+	}
+	public void setPlayerRegBy(String playerRegBy) {
+		this.playerRegBy = playerRegBy;
+	}
+	public boolean isSelected() {
+		return selected;
+	}
+	public void setSelected(boolean selected) {
+		this.selected = selected;
+	}
+	public Integer getTournamentId() {
+		return tournamentId;
+	}
+	public void setTournamentId(Integer tournamentId) {
+		this.tournamentId = tournamentId;
+	}
+	public Integer getCategoryId() {
+		return categoryId;
+	}
+	public void setCategoryId(Integer categoryId) {
+		this.categoryId = categoryId;
+	}
 	@Override
 	public String toString() {
 		return "PlayersBean [name=" + name + ", dateOfBirth=" + dateOfBirth + ", address=" + address + ", lavel="
 				+ lavel + ", phone=" + phone + ", email=" + email + ", pwd=" + pwd + ", repwd=" + repwd + ", itaId="
 				+ itaId + ", itaRank=" + itaRank + ", gender=" + gender + ", points=" + points + ", rank=" + rank
 				+ ", age=" + age + ", playerId=" + playerId + ", playerAge=" + playerAge + ", registeredBy="
-				+ registeredBy + ", paymentId=" + paymentId + "]";
+				+ registeredBy + ", paymentId=" + paymentId + ", playerId2=" + playerId2 + ", playerRegBy="
+				+ playerRegBy + ", selected=" + selected + ", tournamentId=" + tournamentId + ", categoryId="
+				+ categoryId + "]";
 	}
+
 	
 	
 }

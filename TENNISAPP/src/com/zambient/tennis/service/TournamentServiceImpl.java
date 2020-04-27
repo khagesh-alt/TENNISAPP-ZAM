@@ -269,5 +269,11 @@ public class TournamentServiceImpl implements TournamentService{
 		return tournamentDao.getPlayerPublishMethod(tournamentId, categoryId);
 	}
 
+	@Override
+	public String multiplayerdelete(JSONArray deletePlayerList) {
+		// TODO Auto-generated method stub
+		return tournamentDao.multiplayerdelete(deletePlayerList);
+	}
+
 
 }

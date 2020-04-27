@@ -32,25 +32,16 @@ $scope.showFeature = function(id) {
 		$scope.show = id;
 	}
 }
-//$scope.listedTournaments = true;
-//$scope.descTournaments = false;
-//$scope.tournamentTabs = false;
 
 if (typeof(Storage) !== "undefined") {
-	//alert("sessionStorage 1");
 	var showFlag= sessionStorage.getItem("showFlag");
-	//alert("session storage "+showFlag)
 	if(showFlag==null){
 		$scope.showFeature(0);
 	}else if( showFlag){
-	//	alert("sessionStorage 3");
 	$scope.showFeature(1);
 	sessionStorage.removeItem("showFlag");
-	
-	
 	}else{
 		$scope.showFeature(0);
-	
 	}
 }
 
@@ -106,7 +97,7 @@ $scope.mainCategoryList = function(){
 		method : "GET",
 		url : mainCategoryList
 	  }).then(function mySuccess(response) {
-		  console.log(JSON.stringify(response.data));
+		 // console.log(JSON.stringify(response.data));
 	    $scope.tournamentCat = response.data;
 	  }, function myError(response) {
 		//alert(response);
@@ -207,6 +198,8 @@ $scope.getRagisteredPlayers = function(){
   }).then(function mySuccess(response) {
 	// console.log(JSON.stringify(response.data));
 	$scope.playerListForAcategory = response.data;
+	$scope.registeredByFilter = undefined;
+	$scope.CheckUncheckHeader();
   }, function myError(response) {
   });
 }  
@@ -357,8 +350,8 @@ $scope.adjustmentRakByOrg = function(){
 
     table.find('tr').each(function (i) {
         var $tds = $(this).find('td'),
-            playerId = parseInt($tds.eq(0).text()),
-            updatedRank = parseInt($tds.eq(1).text())
+            playerId = parseInt($tds.eq(1).text()),
+            updatedRank = parseInt($tds.eq(2).text())
             
             var input = {
     		"playerId":playerId,
@@ -1183,6 +1176,66 @@ $scope.activeOrInActivePlayersPublish = function(boolVal){
       });
   }
 
+
+$scope.CheckUncheckHeader = function () {
+    $scope.IsAllChecked = true;
+//console.log(JSON.stringify($scope.playerListForAcategory));
+    for (var i = 0; i < $scope.playerListForAcategory.length; i++) {
+        if (!$scope.playerListForAcategory[i].selected) {
+            $scope.IsAllChecked = false;
+            break;
+        }
+    };
+    
+};
+
+$scope.CheckUncheckAll = function () {
+    for (var i = 0; i < $scope.playerListForAcategory.length; i++) {
+    	if($scope.playerListForAcategory[i].registeredBy != 0)
+        $scope.playerListForAcategory[i].selected = $scope.IsAllChecked;
+    }
+};
+
+$scope.deleteMultiplePlayer = function(){
+	$scope.showMultiConfirm();
+	
+}
+$scope.showMultiConfirm = function(){
+	$("#confirmationMultiPlayerpopup").modal("show");
+	$( ".confirmMultiPlayermsg" ).text("Are you sure you want to remove players");
+}	
+
+$scope.deleteMultiPlayer = function(){
+	$("#confirmationMultiPlayerpopup").modal("hide");
+	
+	var json = {
+			"multiplayerdelete": []
+	      };
+	for (var i = 0; i < $scope.playerListForAcategory.length; i++) {
+    	if($scope.playerListForAcategory[i].registeredBy != 0 && $scope.playerListForAcategory[i].selected == true)
+    		json.multiplayerdelete.push($scope.playerListForAcategory[i]);
+    }
+	if((json.multiplayerdelete).length > 0){
+ 	   var multiplayerdeleteUrl = url+"playerView/multiplayerdelete";
+	    $.ajax({
+	        url: multiplayerdeleteUrl,
+	        data: JSON.stringify(json),
+	        contentType: false,
+	        processData: false,
+	        type: 'POST',
+	        success: function(data){
+	        	$scope.getRagisteredPlayers();
+	           	//showAlertSec(data);
+	           	$scope.successmsg = data+"...";
+	    		$("#success-alert").fadeIn(1000);
+	      	    setTimeout(function(){ $("#success-alert").fadeOut(1000) }, 3000);
+	        }
+	    });
+    }
+}
+
+/*
+
 $scope.deleteMultiplePlayer = function(){
 		var json = {
 				"multiplayerdelete": []
@@ -1221,7 +1274,7 @@ $scope.deleteMultiplePlayer = function(){
    	            }
    	    });
        }
-	}
+	}*/
 });
 app.directive('onFinishRender', function ($timeout) {
 	return {

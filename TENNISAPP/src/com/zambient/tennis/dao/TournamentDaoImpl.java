@@ -1,5 +1,6 @@
 package com.zambient.tennis.dao;
 
+import java.sql.Types;
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -7,7 +8,6 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.Map;
-import java.util.Random;
 
 import org.apache.log4j.Logger;
 import org.json.JSONArray;
@@ -19,9 +19,6 @@ import org.springframework.jdbc.core.BeanPropertyRowMapper;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Repository;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.sun.org.apache.xerces.internal.util.ShadowedSymbolTable;
 import com.zambient.tennis.bean.BuildSchedule;
 import com.zambient.tennis.bean.CategoryMasterBean;
 import com.zambient.tennis.bean.CourtBean;
@@ -907,7 +904,8 @@ public class TournamentDaoImpl implements TournamentDao{
 				+ " (SELECT p.player_phone FROM `players` p WHERE p.player_id = t.`player_id1`) AS playerPhone1,"
 				+ "(SELECT p.player_phone FROM `players` p WHERE p.player_id = t.`player_id2`) AS playerPhone2,"
 				+ "(SELECT p.player_itaid FROM `players` p WHERE p.player_id = t.`player_id1`) AS player_itaid,"
-				+ "(SELECT p.player_itarank FROM `players` p WHERE p.player_id = t.`player_id1`) AS player_itarank "
+				+ "(SELECT p.player_itarank FROM `players` p WHERE p.player_id = t.`player_id1`) AS player_itarank,"
+				+ "(SELECT CASE r.registered_by WHEN 0 THEN 'By Player' WHEN 1 THEN 'Bulk Upload' WHEN 2 THEN 'From DB' END AS registered_by FROM player_tournament r WHERE registered_by = t.registered_by LIMIT 1) AS playerRegBy "
 				+ "FROM `player_tournament` t WHERE t.`category_id`="+categoryId+" AND t.`tournament_id`="+tournamentId+" ORDER BY t.`custom_aita` ASC";
 		try{
 			List<Map<String, Object>> rows = jdbcTemplate.queryForList(QUERY);
@@ -926,6 +924,10 @@ public class TournamentDaoImpl implements TournamentDao{
 						bean.setPoints(row.get("player_itarank")!=null?Long.parseLong(row.get("player_itarank").toString()):0);
 						bean.setRegisteredBy(row.get("registered_by")!=null?Long.parseLong(row.get("registered_by").toString()):0);
 						bean.setPaymentId(row.get("payment_id")!=null?Long.parseLong(row.get("payment_id").toString()):0);
+						bean.setPlayerRegBy(row.get("playerRegBy")!=null?row.get("playerRegBy").toString():"");
+						bean.setSelected(false);
+						bean.setTournamentId((int)tournamentId);
+						bean.setCategoryId((int)categoryId);
 						playerList.add(bean);
 					}else{
 					bean.setPlayerId(row.get("player_id1")!=null?Long.parseLong(row.get("player_id1").toString()):-1);
@@ -938,6 +940,10 @@ public class TournamentDaoImpl implements TournamentDao{
 					bean.setPoints(row.get("player_itarank")!=null?Long.parseLong(row.get("player_itarank").toString()):0);
 					bean.setRegisteredBy(row.get("registered_by")!=null?Long.parseLong(row.get("registered_by").toString()):0);
 					bean.setPaymentId(row.get("payment_id")!=null?Long.parseLong(row.get("payment_id").toString()):0);
+					bean.setPlayerRegBy(row.get("playerRegBy")!=null?row.get("playerRegBy").toString():"");
+					bean.setSelected(false);
+					bean.setTournamentId((int)tournamentId);
+					bean.setCategoryId((int)categoryId);
 					playerList.add(bean);
 				  }
 				}
@@ -1312,7 +1318,7 @@ public class TournamentDaoImpl implements TournamentDao{
 				val1 = jdbcTemplate.update(QUERY, new Object[]{categoryId,tournamentId,"SUCCESS",entryFee,"CASH"});
 				paymentId = jdbcTemplate.queryForObject("SELECT payment_id FROM `payment` ORDER BY payment_id DESC LIMIT 1", Integer.class);
 				if(paymentId >=0)
-				val2 = jdbcTemplate.update("INSERT INTO `player_tournament` (player_id1,player_id2,tournament_id,category_id,custom_aita,payment_id,registered_by) VALUES(?,?,?,?,?,?,?)", new Object[]{playerId,-1,tournamentId,categoryId,itaRank,paymentId,1});
+				val2 = jdbcTemplate.update("INSERT INTO `player_tournament` (player_id1,player_id2,tournament_id,category_id,custom_aita,payment_id,registered_by) VALUES(?,?,?,?,?,?,?)", new Object[]{playerId,-1,tournamentId,categoryId,itaRank,paymentId,2});
 				if(val1 >0 && val2 >0)
 	    			result = "Success";
 	    		else
@@ -1552,7 +1558,7 @@ public class TournamentDaoImpl implements TournamentDao{
 				val1 = jdbcTemplate.update(QUERY, new Object[]{rec.getInt("categoryId"),rec.getInt("tournamentId"),"SUCCESS",rec.getInt("entryFee"),"CASH"});
 				paymentId = jdbcTemplate.queryForObject("SELECT payment_id FROM `payment` ORDER BY payment_id DESC LIMIT 1", Integer.class);
 				if(paymentId >=0)
-				val2 = jdbcTemplate.update("INSERT INTO `player_tournament` (player_id1,player_id2,tournament_id,category_id,custom_aita,payment_id,registered_by) VALUES(?,?,?,?,?,?,?)", new Object[]{rec.getInt("playerId"),rec2.getInt("playerId"),rec.getInt("tournamentId"),rec.getInt("categoryId"),rec.getInt("aitaRank"),paymentId,1});
+				val2 = jdbcTemplate.update("INSERT INTO `player_tournament` (player_id1,player_id2,tournament_id,category_id,custom_aita,payment_id,registered_by) VALUES(?,?,?,?,?,?,?)", new Object[]{rec.getInt("playerId"),rec2.getInt("playerId"),rec.getInt("tournamentId"),rec.getInt("categoryId"),rec.getInt("aitaRank"),paymentId,2});
 				if(val1 >0 && val2 >0)
 	    			result = "Players registered successfully.";
 	    		else
@@ -2066,7 +2072,7 @@ public class TournamentDaoImpl implements TournamentDao{
         		  jdbcTemplate.update("DELETE FROM matchs WHERE tournament_id=? AND category_id=? AND (match_player1=? OR match_player2=? OR match_player3=? OR match_player4=?)", 
         				  new Object[]{tournamentId,categoryId,playerId,playerId,playerId,playerId});
         	  }
-        	 int tournament_reg = jdbcTemplate.update("DELETE FROM player_tournament WHERE tournament_id=? AND category_id=? AND player_id1=? AND payment_id=? AND registered_by=1", new Object[]{tournamentId,categoryId,playerId,paymentId});
+        	 int tournament_reg = jdbcTemplate.update("DELETE FROM player_tournament WHERE tournament_id=? AND category_id=? AND player_id1=? AND payment_id=? AND registered_by !=0", new Object[]{tournamentId,categoryId,playerId,paymentId});
         	  if(tournament_reg > 0){
         		  payment = jdbcTemplate.update("DELETE FROM payment WHERE tournament_id=? AND category_id=? AND payment_id=?", new Object[]{tournamentId,categoryId,paymentId});
         	  }
@@ -2616,6 +2622,46 @@ public class TournamentDaoImpl implements TournamentDao{
 		}catch(Exception e){
 			e.printStackTrace();
 			return false;
+		}
+		return result;
+	}
+	@Override
+	public String multiplayerdelete(JSONArray deletePlayerList) {
+      String result = null;
+		String sql1 = "DELETE FROM matchs WHERE tournament_id=? AND category_id=? AND (match_player1=? OR match_player2=? OR match_player3=? OR match_player4=?)";
+		int[] argTypes1 = { Types.INTEGER, Types.INTEGER, Types.INTEGER, Types.INTEGER, Types.INTEGER,Types.INTEGER };
+		List<Object[]> batchArgs1 = new ArrayList<>();
+		
+		String sql2 = "DELETE FROM player_tournament WHERE tournament_id=? AND category_id=? AND player_id1=? AND payment_id=? AND registered_by !=0";
+		int[] argTypes2 = { Types.INTEGER, Types.INTEGER, Types.INTEGER, Types.INTEGER };
+		List<Object[]> batchArgs2 = new ArrayList<>();
+		
+		String sql3 = "DELETE FROM payment WHERE tournament_id=? AND category_id=? AND payment_id=?";
+		int[] argTypes3 = { Types.INTEGER, Types.INTEGER, Types.INTEGER};
+		List<Object[]> batchArgs3 = new ArrayList<>();
+		try{
+		for(int i=0; i<deletePlayerList.length(); i++){
+			try {
+				batchArgs1.add(new Object[] { deletePlayerList.getJSONObject(i).getInt("tournamentId"), deletePlayerList.getJSONObject(i).getInt("categoryId"), deletePlayerList.getJSONObject(i).getInt("playerId"), deletePlayerList.getJSONObject(i).getInt("playerId"), deletePlayerList.getJSONObject(i).getInt("playerId"), deletePlayerList.getJSONObject(i).getInt("playerId") });
+				batchArgs2.add(new Object[] { deletePlayerList.getJSONObject(i).getInt("tournamentId"), deletePlayerList.getJSONObject(i).getInt("categoryId"), deletePlayerList.getJSONObject(i).getInt("playerId"), deletePlayerList.getJSONObject(i).getInt("paymentId") });
+				batchArgs3.add(new Object[] { deletePlayerList.getJSONObject(i).getInt("tournamentId"), deletePlayerList.getJSONObject(i).getInt("categoryId"), deletePlayerList.getJSONObject(i).getInt("paymentId") });
+			} catch (JSONException e) {
+				result = "Something went wrong!";
+				e.printStackTrace();
+			}
+		}
+		int[] rowCounts1 = jdbcTemplate.batchUpdate(sql1, batchArgs1, argTypes1);
+		int[] rowCounts2 = jdbcTemplate.batchUpdate(sql2, batchArgs2, argTypes2);
+		int[] rowCounts3 = jdbcTemplate.batchUpdate(sql3, batchArgs3, argTypes3);
+		if(rowCounts1.length > 0 && rowCounts2.length > 0 && rowCounts3.length > 0){
+			result = "Player got removed.";
+		}else{
+			result = "Something went wrong!";
+		}
+		}catch(Exception e){
+			result = "Something went wrong!";
+			e.printStackTrace();
+			log.error(e.getMessage());
 		}
 		return result;
 	}

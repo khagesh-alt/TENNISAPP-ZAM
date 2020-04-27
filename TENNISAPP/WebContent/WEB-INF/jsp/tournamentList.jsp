@@ -380,10 +380,6 @@ font-size: 11px;
 			</div>
 			</details>
 			</div>
-			<!-- shiva -->
-				
-			<!-- end shiva -->
-			 
           <div class="categoryList">
 			<hr>
 			<table class="table">
@@ -459,8 +455,15 @@ font-size: 11px;
   </div>
 </div>
 <div class="tab-pane fade show active categoryList" id="players-just" role="tabpanel" aria-labelledby="players-tab-just">
-   <div style="width: 100%;display: inline-block;">
    <input type="checkbox" ng-model="playerPublish" style="position: inherit;" ng-click="activeOrInActivePlayersPublish(playerPublish)"> Publish Players
+   <div style="width: 100%;display: inline-block;">
+   
+    <select ng-model="registeredByFilter" class="form-control" style="width: 20%;float: left;display: inline;margin-top: 10px;">
+		  <option value>ALL PLAYERS</option>
+		  <option ng-repeat="list in playerListForAcategory | unique:'playerRegBy'" value="{{list.playerRegBy}}">{{list.playerRegBy}}</option>
+	   </select>
+      <a class="btn btn-primary btn-success" style="float: left;" ng-click="deleteMultiplePlayer()">Delete</a>
+   
 	<a ng-if="compaireDate == false" href="" class="btn btn-primary btn-success" style="float: right;" ng-click="addExistingPlayer()">+ADD PLAYER</a>
 	<a ng-if="compaireDate == false  && matchTypeReg == 1" href="" class="btn btn-primary btn-success" style="float: right;" data-toggle="modal" data-target="#bulkUploadPopupForSingle">BULK UPLOAD</a>
 	<a ng-if="compaireDate == false  && matchTypeReg == 2" href="" class="btn btn-primary btn-success" style="float: right;" data-toggle="modal" data-target="#bulkUploadPopupForDouble">BULK UPLOAD</a>
@@ -470,7 +473,7 @@ font-size: 11px;
      <table class="table glyphicon-hover" id="adjRankTab">
 		<thead>
 		  <tr>
-		   <th scope="col" style="display:none;"> <a style="color : #18d26e" ng-click="deleteMultiplePlayer()">Delete</a></th>
+		    <th><input type="checkbox" ng-model="IsAllChecked" ng-change="CheckUncheckAll()" /></th>
 			<th scope="col">Seeding</th>
 			<th scope="col">Name</th>
 			<th scope="col">Age</th>
@@ -482,14 +485,14 @@ font-size: 11px;
 		  </tr>
 		</thead>
 		<tbody ui-sortable ng-model="playerListForAcategory">
-		  <tr ng-repeat="players in playerListForAcategory">
-		    <td style="font-size: 12px;padding-top: 1.1rem;border-top: 1px solid #dee2e6;padding-top: 8px;padding-bottom: 8px;display:none;"><input type="checkbox" name="player" style="display:none;"></td>
+		  <tr ng-repeat="players in playerListForAcategory | filter:{playerRegBy:registeredByFilter,playerRegBy:registeredByFilter||undefined}:true">
+		    <td style="font-size: 12px;padding-top: 1.1rem;border-top: 1px solid #dee2e6;padding-top: 8px;padding-bottom: 8px;">
+		    <input ng-if="players.registeredBy != 0  && compaireDate == false" id="chkCustomer_{{players.playerId}}" type="checkbox" ng-model="players.selected" ng-change="CheckUncheckHeader()" /></td>
 			<td style="display: none;">{{players.playerId}}</td>
 			<td ng-if="playerListForAcategory.length <=8" scope="row" style="font-size: 12px;padding-top: 1.1rem;border-top: 1px solid #dee2e6;padding-top: 8px;padding-bottom: 8px;" ng-class="{'visibleHidden': $index > 1}">{{$index+1}}</td>
 			<td ng-if="playerListForAcategory.length >8 && playerListForAcategory.length <=16" scope="row" style="font-size: 12px;padding-top: 1.1rem;border-top: 1px solid #dee2e6;padding-top: 8px;padding-bottom: 8px;" ng-class="{'visibleHidden': $index > 3}">{{$index+1}}</td>
 			<td ng-if="playerListForAcategory.length >16 && playerListForAcategory.length <=32" scope="row" style="font-size: 12px;padding-top: 1.1rem;border-top: 1px solid #dee2e6;padding-top: 8px;padding-bottom: 8px;" ng-class="{'visibleHidden': $index > 7}">{{$index+1}}</td>
 			<td ng-if="playerListForAcategory.length >32 && playerListForAcategory.length <=64" scope="row" style="font-size: 12px;padding-top: 1.1rem;border-top: 1px solid #dee2e6;padding-top: 8px;padding-bottom: 8px;" ng-class="{'visibleHidden': $index >15}">{{$index+1}}</td>
-			<!-- <td style="font-size: 12px;padding-top: 1.1rem;border-top: 1px solid #dee2e6;padding-top: 8px;padding-bottom: 8px;" ng-click="editPlayerDetails(players)">{{players.name}} <i class="glyphicon fas fa-pen" style="color: #18d26e;"></i></td> -->
 			<td style="font-size: 12px;padding-top: 1.1rem;border-top: 1px solid #dee2e6;padding-top: 8px;padding-bottom: 8px;" >{{players.name}}</td>
 			<td style="font-size: 12px;padding-top: 1.1rem;border-top: 1px solid #dee2e6;padding-top: 8px;padding-bottom: 8px;">{{players.playerAge}}</td>
 			<td style="font-size: 12px;padding-top: 1.1rem;border-top: 1px solid #dee2e6;padding-top: 8px;padding-bottom: 8px;">{{players.phone}}</td>
@@ -498,7 +501,7 @@ font-size: 11px;
 			<td ng-if="players.points != 11111111" style="font-size: 12px;padding-top: 1.1rem;border-top: 1px solid #dee2e6;padding-top: 8px;padding-bottom: 8px;">{{players.itaId}}</td>
 			<td ng-if="players.points == 11111111" style="font-size: 12px;padding-top: 1.1rem;border-top: 1px solid #dee2e6;padding-top: 8px;padding-bottom: 8px;">-</td>
 			<td ng-if="players.points != 11111111" style="font-size: 12px;padding-top: 1.1rem;border-top: 1px solid #dee2e6;padding-top: 8px;padding-bottom: 8px;">{{players.points}}</td>
-			<td ng-if="players.registeredBy == 1  && compaireDate == false" style="padding-top: 1.1rem;border-top: 1px solid #dee2e6;padding-top: 8px;padding-bottom: 8px;">
+			<td ng-if="players.registeredBy != 0  && compaireDate == false" style="padding-top: 1.1rem;border-top: 1px solid #dee2e6;padding-top: 8px;padding-bottom: 8px;">
 			<i class="fas fa-trash-alt" style="font-size: 11px;color: #fff; padding: 2px;" ng-click="deleteFromTournament(players.playerId,players.paymentId,players.name)"></i>
 			</td>
 			<td ng-if="players.registeredBy == 0" style="padding-top: 1.1rem;border-top: 1px solid #dee2e6;padding-top: 8px;padding-bottom: 8px;"></td>
@@ -1049,6 +1052,27 @@ font-size: 11px;
   </div>
 </div>
 <!-- Modal: modalCart -->
+
+<!-- Modal -->
+<div class="modal fade" id="confirmationMultiPlayerpopup" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+  aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalLabel">Confirm</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body confirmMultiPlayermsg">
+      </div>
+      <div class="modal-footer" style="padding: 5px;">
+        <button type="button" class="btn  btn-success" style="padding: 6px 12px 6px 12px;" ng-click="deleteMultiPlayer()">OK</button>
+        <button type="button" class="btn  btn-success" style="padding: 6px 12px 6px 12px;" data-dismiss="modal">Close</button>
+      </div>
+    </div>
+  </div>
+</div>
 </main>
 </div>
 <a href="#" class="back-to-top"><i class="fa fa-chevron-up"></i></a>

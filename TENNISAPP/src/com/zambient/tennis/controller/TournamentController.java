@@ -253,7 +253,7 @@ System.out.println("Result:: "+result);
 		         body=body.replace("{{User}}",playerName);
 		         body=body.replace("{{userId}}",playerPhone);
 		         body=body.replace("{{password}}","tennis");
-				 body=body.replace("{{ResetPwdURL}}","http://apps.zambientsystems.com:8080/TENNIS/playerhome");
+				 body=body.replace("{{ResetPwdURL}}","http://1.186.104.23:1723/TENNISAPP/playerhome");
 				 new SendEmail(mailFromUsername, "", playerEmail, emailTemplateBean.getSubject(), body, tennisMail).start();
 			}
 			return result;
@@ -572,8 +572,8 @@ System.out.println("Result:: "+result);
 			log.info("multiplayerdelete POST "+values);
 			JSONObject jsonObject = new JSONObject(values);
 			JSONArray deletePlayerList = jsonObject.getJSONArray("multiplayerdelete");
-			//String result = tournamentService.updateAitaRankByOrganiser(playerRank);
-			return null;
+			String result = tournamentService.multiplayerdelete(deletePlayerList);
+			return result;
 			
 		}
 		@RequestMapping(value = "playerView/getPlayersPublishMethod", method = RequestMethod.GET)
@@ -584,21 +584,5 @@ System.out.println("Result:: "+result);
 			response.setHeader("value", "valid");
 			 return tournamentService.getPlayerPublishMethod(tournamentId, categoryId);
 		}
-		
-		@RequestMapping(value = "playerView/checkMailStatus", method = RequestMethod.GET)
-		public void checkMailStatus(HttpServletRequest request, HttpServletResponse response){
-			System.out.println("checkMailStatus::::");
-			 new SendEmail("tennisappzambient@gmail.com", "khageshics@gmail.com", "khagesh.patel1991@gmail.com", "Testing", "Hello Shiva....", tennisMail).start();
-			
-			
-		}
-		
-		
-		
-		
-		
-		
-		
-		
-		
+	
 }

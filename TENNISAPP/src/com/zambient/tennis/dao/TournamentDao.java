@@ -65,5 +65,7 @@ public interface TournamentDao {
 	public String setActiveOrInActivePlayers(int tournamentId, int categoryId, int activeVal);
 	public PlayesrListAndPublishPlayer isPlayerListPublish(int tournamentId, int categoryId);
 	public boolean getPlayerPublishMethod(int tournamentId, int categoryId);
+	public String multiplayerdelete(JSONArray deletePlayerList);
+	
 	
 }

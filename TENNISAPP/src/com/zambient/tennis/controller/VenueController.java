@@ -116,7 +116,7 @@ public class VenueController {
 	         body=body.replace("{{User}}",organizerRegistartion.getName());
 	         body=body.replace("{{userId}}",organizerRegistartion.getPhone());
 	         body=body.replace("{{password}}",password);
-			 body=body.replace("{{ResetPwdURL}}","http://apps.zambientsystems.com:8080/TENNIS/organiserlogin");
+			 body=body.replace("{{ResetPwdURL}}","http://1.186.104.23:1723/TENNISAPP/organiserlogin");
 			 new SendEmail(mailFromUsername, "", organizerRegistartion.getMailId(), emailTemplateBean.getSubject(), body, tennisMail).start();
 		 }
 		}
