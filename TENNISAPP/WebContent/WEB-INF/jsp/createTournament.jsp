@@ -379,10 +379,10 @@ select {
               <span style="color:Red;font-size: .6em;" ng-show="createTournament.organizerMobile.$error.number">Not valid number!</span>
               <span style="color:Red;font-size: .6em;" ng-show="createTournament.organizerMobile.$dirty&&createTournament.organizerMobile.$error.pattern">Only Numbers Allowed, should 10 digits!</span>
 			</div>
-			<div class=""> 
+			<!-- <div class=""> 
 			 <label>Registration Start Date*</label>
 			  <input type="text" id="regStartDate" class="form-control tournamentDate" style="background: transparent;" data-date-format="yyyy-mm-dd" required="required" readonly>
-			 </div>
+			 </div> -->
 			 <div class=""> 
 			    <label>Tournament Start Date*</label>
 				<input type="text" id="tournamentStartDate" class="form-control tournamentDate" style="background: transparent;" data-date-format="yyyy-mm-dd" required="required" readonly>
@@ -411,10 +411,10 @@ select {
                <span style="color:Red;font-size: .6em;" ng-show="createTournament.organizerAltMobile.$error.number">Not valid number!</span>
                <span style="color:Red;font-size: .6em;" ng-show="createTournament.organizerAltMobile.$dirty&&createTournament.organizerAltMobile.$error.pattern">Only Numbers Allowed, should 10 digits!</span>
 			</div>
-			<div class=""> 
+			<!-- <div class=""> 
 			   <label>Registration End Date*</label>
 			   <input type="text" id="regEndDate" class="form-control tournamentDate" style="background: transparent;" data-date-format="yyyy-mm-dd" required="required" readonly>
-			 </div>
+			 </div> -->
 			 <div class=""> 
 			    <label>Tournament End Date*</label>
 				<input type="text" id="tournamentEndDate"  class="form-control tournamentDate" style="background: transparent;" data-date-format="yyyy-mm-dd" required="required" readonly>

@@ -23,6 +23,21 @@ $( ".tournamentDate" ).datepicker({
 	autoclose: true, 
     todayHighlight: true
 });
+
+$("#updateTournamentStartDate").change(function(){
+	 var tournamentStartDate= $("#updateTournamentStartDate").val();
+	  const regEndDateTemp = new Date(tournamentStartDate);
+		regEndDateTemp.setDate(regEndDateTemp.getDate() - 1);
+		var dd_re = regEndDateTemp.getDate();
+	    var mm_re = regEndDateTemp.getMonth()+1; 
+	    var yyyy_re = regEndDateTemp.getFullYear();
+	     if(dd_re<10) 
+	     {  dd_re='0'+dd_re;   } 
+	     if(mm_re<10) {   mm_re='0'+mm_re;}
+
+		$("#updateRegEndDate").val(yyyy_re+'-'+mm_re+'-'+dd_re);
+	});
+
 $scope.show = 0;
 $scope.showFeature = function(id) {
 	if(id==101){
@@ -1233,6 +1248,8 @@ $scope.deleteMultiPlayer = function(){
 	    });
     }
 }
+
+
 
 /*
 

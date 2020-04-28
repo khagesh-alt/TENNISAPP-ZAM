@@ -15,6 +15,7 @@ app.controller('myCtrl', function($scope, $http) {
 		$scope.getAllCategories();
 		$scope.getRankCategories();
 		$scope.getProfile();
+		
     };
 	
 	$scope.organizerName = $("#hiddenorganizername").val();
@@ -426,12 +427,38 @@ $scope.postTournament = function(){
 	var referee = $scope.referee;
 	var venueId = $scope.selitem.venueId;
 	var organiserId = parseInt($("#organizerId").val());
-	var regStartDate = $("#regStartDate").val();
-	var regEndDate = $("#regEndDate").val();
+	
+	//Manual regStartDate and regEndDate
+	/*var regStartDate = $("#regStartDate").val();
+	var regEndDate = $("#regEndDate").val();*/
+	
+	//Automatica : regStartDate taking as tournment created date [current date]
+
+	//crurrentdate creation as regStartDate
+	var today = new Date();
+	var dd = today.getDate();
+    var mm = today.getMonth()+1; 
+    var yyyy = today.getFullYear();
+    if(dd<10) 
+     {  dd='0'+dd;   } 
+     if(mm<10) {   mm='0'+mm;}
+
+	var regStartDate = yyyy+'-'+mm+'-'+dd;
 	var tournamentStartDate = $("#tournamentStartDate").val();
+	
+	//regEndDate creation
+	const regEndDateTemp = new Date(tournamentStartDate);
+	regEndDateTemp.setDate(regEndDateTemp.getDate() - 1);
+	var dd_re = regEndDateTemp.getDate();
+    var mm_re = regEndDateTemp.getMonth()+1; 
+    var yyyy_re = regEndDateTemp.getFullYear();
+     if(dd_re<10) 
+     {  dd_re='0'+dd_re;   } 
+     if(mm_re<10) {   mm_re='0'+mm_re;}
+
+	var regEndDate = yyyy_re+'-'+mm_re+'-'+dd_re;
 	var tournamentEndDate = $("#tournamentEndDate").val();
 
-	
 	var formData = new FormData();
 	 formData.append('bannerImage', $( '#bannerImage' )[0].files[0]);
 	

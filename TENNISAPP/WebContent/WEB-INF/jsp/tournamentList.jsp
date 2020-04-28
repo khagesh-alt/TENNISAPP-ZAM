@@ -602,7 +602,7 @@ font-size: 11px;
           <div class="modal-body centredisplay">
           <p style="margin: 0px;color: red;font-size: 14px;">{{tournamentDateValidate}}</p>
           <form ng-submit="extendsTournament()">
-            <div class="">
+            <div class="" style="display: none;">
              <label>Registration Start Date*</label>
             <input type="text" id="updateRegStartDate" name="updateRegStartDate" class="form-control tournamentDate" required="required" autocomplete="off" ng-click="tournamentDateValidate = null">
             </div>
@@ -612,7 +612,7 @@ font-size: 11px;
             </div>
             <div class="">
             <label>Tournament Start Date*</label>
-            <input type="text" id="updateTournamentStartDate" name="updateTournamentStartDate" class="form-control tournamentDate" required="required" autocomplete="off" ng-click="tournamentDateValidate = null">
+            <input type="text" id="updateTournamentStartDate" name="updateTournamentStartDate" class="form-control tournamentDate" required="required" autocomplete="off" ng-click="tournamentDateValidate = null" >
             </div>
             <div class="">
             <label>Tournament End Date*</label>
