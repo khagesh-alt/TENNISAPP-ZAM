@@ -584,5 +584,10 @@ System.out.println("Result:: "+result);
 			response.setHeader("value", "valid");
 			 return tournamentService.getPlayerPublishMethod(tournamentId, categoryId);
 		}
+		
+		public void aaa(){
+			
+			System.out.println("Testing");
+		}
 	
 }
