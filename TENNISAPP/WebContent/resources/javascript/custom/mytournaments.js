@@ -48,7 +48,7 @@ $scope.showFeature = function(id) {
 	}
 }
 
-if (typeof(Storage) !== "undefined") {
+ if (typeof(Storage) !== "undefined") {
 	var showFlag= sessionStorage.getItem("showFlag");
 	if(showFlag==null){
 		$scope.showFeature(0);

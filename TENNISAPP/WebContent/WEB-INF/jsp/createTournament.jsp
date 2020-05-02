@@ -26,6 +26,7 @@
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-select/1.13.1/css/bootstrap-select.css" />
 <link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.3.0/css/datepicker.css" rel="stylesheet" type="text/css" />
 
+
    <link href="https://mdbootstrap.com/wp-content/themes/mdbootstrap4/css/compiled-4.8.0.min.css?ver=4.8.0 "rel="stylesheet">
 <link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
   <link rel="stylesheet" href="/resources/demos/style.css">
@@ -387,6 +388,10 @@ select {
 			    <label>Tournament Start Date*</label>
 				<input type="text" id="tournamentStartDate" class="form-control tournamentDate" style="background: transparent;" data-date-format="yyyy-mm-dd" required="required" readonly>
 			 </div>
+			<!--  <div class=""> 
+            <label style="color:#18d26e">Tournament closes on </label><label style="color:red"> 29-11-2020</label>
+				
+			 </div> -->
 			 <div class=""> 
 			     <label>Choose a banner image</label>
                  <input type="file" id="bannerImage" name="bannerImage" fileread="uploadme" accept="image/*" placeholder="Select Image" class="form-control">

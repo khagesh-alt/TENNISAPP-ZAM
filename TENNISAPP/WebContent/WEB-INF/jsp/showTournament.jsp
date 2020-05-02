@@ -486,7 +486,7 @@ font-size: 11px;
 	       <i class="fas fa-download" style="font-size: 20px;color: #fff;padding: 5px 15px 0px 0px;float: right;cursor: pointer;" title="Download Schedule" ng-click="downloadschedule()"></i>
      	 </div>  
      	   
-     	   
+     	 
         <button type="button" class="close" data-dismiss="modal" aria-label="Close">
           <span aria-hidden="true" style="color: #fff !important;">×</span>
         </button>

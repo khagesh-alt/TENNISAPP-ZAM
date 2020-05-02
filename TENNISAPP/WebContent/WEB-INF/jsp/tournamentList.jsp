@@ -635,7 +635,6 @@ font-size: 11px;
   <!-- Change class .modal-sm to change the size of the modal -->
   <div class="modal-dialog modal-lg" role="document">
 
-
     <div class="modal-content">
       <div class="modal-header text-center" style="background: #18d26e!important;color: #fff;">
         <h6 class="modal-title w-100" id="myModalLabel">ADD PLAYER TO TOURNAMENT</h6>

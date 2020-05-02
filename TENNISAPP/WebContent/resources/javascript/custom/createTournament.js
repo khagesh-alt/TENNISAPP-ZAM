@@ -5,6 +5,7 @@ app.controller('myCtrl', function($scope, $http) {
 	
 	var myUrl = window.location.href;
 	var url = myUrl.substring(0, myUrl.lastIndexOf('/') + 1);
+	$scope.tournmentRegEndDate;
 	
 	$scope.show = 0;
 	$("#success-alert").hide();
@@ -72,7 +73,7 @@ $scope.getProfile = function(){
 	   	 // console.log(JSON.stringify(response.data));
 	  	  $scope.profileData = response.data;
 	   }, function myError(response) {
-		    	//alert(response);
+		   	//alert(response);
 	 });
 }
 

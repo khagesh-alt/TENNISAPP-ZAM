@@ -671,7 +671,6 @@ transform: translateY(-140%);
  </div>
 </div>
 
-
 </div>
 
 	<!-- Side Modal Top Right -->
